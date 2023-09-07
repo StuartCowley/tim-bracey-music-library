@@ -5,15 +5,21 @@
   "main": "index.js",
   "scripts": {
     "prestart": "node scripts/create-database.js",
-    "start": "nodemon -r dotenv/config index.js"
+    "start": "nodemon -r dotenv/config index.js",
+    "test": "mocha tests/**/*.js --exit --recursive --timeout 60000 --file ./tests/test-setup.js",
+    "pretest": "node scripts/create-database.js test",
+    "posttest": "node scripts/drop-database.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "chai": "^4.3.8",
     "dotenv": "^16.3.1",
     "eslint": "^8.48.0",
-    "nodemon": "^3.0.1"
+    "mocha": "^10.2.0",
+    "nodemon": "^3.0.1",
+    "supertest": "^6.3.3"
   },
   "dependencies": {
     "express": "^4.18.2",
