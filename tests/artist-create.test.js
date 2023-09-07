@@ -20,8 +20,8 @@ describe('create artist', () => {
 
 
 
-      xit('creates a new artist in the database', async () => {
-        const res = (await request(app).post('/artists')).send({
+      it('creates a new artist in the database', async () => {
+        const res = await request(app).post('/artists').send({
           name: 'Periphery',
           genre: 'Progressive Metal',
         });
