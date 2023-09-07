@@ -1,5 +1,6 @@
 const { expect } = require('chai');
 const request = require('supertest');
+const db = require('../src/db');
 const app = require('../src/app');
 const { addArtist } = require('../src/controllers/artist');
 const sinon = require('sinon');
@@ -21,12 +22,20 @@ describe('create artist', () => {
 
 
       it('creates a new artist in the database', async () => {
-        const res = await request(app).post('/artists').send({
+        const { status, body } = await request(app).post('/artists').send({
           name: 'Periphery',
           genre: 'Progressive Metal',
         });
 
-        expect(res.status).to.equal(201);
+        expect(status).to.equal(201);
+        expect(body.name).to.equal('Periphery');
+        expect(body.genre).to.equal('Progressive Metal');
+
+        const {
+          rows: [artistData],
+        } = await db.query(`SELECT * FROM Artists WHERE id = ${body.id}`);
+        expect(artistData.name).to.equal('Periphery');
+        expect(artistData.genre).to.equal('Progressive Metal');
       });
     });
   });
