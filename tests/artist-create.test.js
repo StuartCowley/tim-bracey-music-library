@@ -2,17 +2,20 @@ const { expect } = require('chai');
 const request = require('supertest');
 const app = require('../src/app');
 const { addArtist } = require('../src/controllers/artist');
+const sinon = require('sinon');
 
 describe('create artist', () => {
   describe('/artists', () => {
     describe('POST', () => {
       it('expects a 201 status code', async () => {
         const req = {};
-        const res = { sendStatus: 201};
+        const res = { status: sinon.spy()};
 
         addArtist(req, res);
 
-        expect(res.sendStatus).to.equal(201);
+        // expect(res.sendStatus).to.equal(201);
+        expect(res.status.calledOnce).to.be.true;
+        expect(res.status.calledWith(201)).to.be.true;
       });
 
 
