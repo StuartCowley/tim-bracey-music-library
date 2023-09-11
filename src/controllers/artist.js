@@ -28,7 +28,7 @@ const getArtistById = async (req, res) => {
     const { rows: [ artist ] } = await db.query('SELECT * FROM Artists WHERE id = $1', [req.params.id]);
 
     if(!artist) {
-     res.status(404).json({ message: `artist ${req.params.id} does not exist` }); 
+     res.status(404).json({ message: `artist ${req.params.id} does not exist` });
     }
 
     res.status(200).json(artist);
@@ -37,4 +37,68 @@ const getArtistById = async (req, res) => {
   }
 }
 
-module.exports = { createArtist, getAllArtists, getArtistById }
+// MY DIRTY WAY
+
+// const updateArtist = async (req, res) => {
+//   try {
+//     if(req.body.name && req.body.genre) {
+
+//       const { rows: [ artist ] } = await db.query('UPDATE Artists SET name = $1, genre = $2 WHERE id = $3 RETURNING *', [req.body.name, req.body.genre, req.params.id]);
+
+//       if(!artist) {
+//         res.status(404).json({ message: `artist ${req.params.id} does not exist` });
+//       }
+//       res.status(200).json(artist);
+//     } else if(req.body.name && !req.body.genre) {
+
+//       const { rows: [ artist ] } = await db.query('UPDATE Artists SET name = $1 WHERE id = $2 RETURNING *', [req.body.name, req.params.id]);
+//       if(!artist) {
+//         res.status(404).json({ message: `artist ${req.params.id} does not exist` });
+//       }
+//       res.status(200).json(artist);
+//     } else if(req.body.genre && !req.body.name) {
+
+//       const { rows: [ artist ] } = await db.query('UPDATE Artists SET genre = $1 WHERE id = $2 RETURNING *', [req.body.genre, req.params.id]);
+//       if(!artist) {
+//         res.status(404).json({ message: `artist ${req.params.id} does not exist` });
+//       }
+//       res.status(200).json(artist);
+//     }
+//   } catch (err) {
+//     res.status(500).json(err.message);
+//   }
+// }
+
+
+// Clean way
+const updateArtist = async (req, res) => {
+  const { id } = req.params;
+  const { name, genre } = req.body;
+
+  let query, params;
+
+  if (name && genre) {
+    query = 'UPDATE Artists SET name = $1, genre = $2 WHERE id = $3 RETURNING *';
+    params = [name, genre, id];
+  } else if (name) {
+    query = 'UPDATE Artists SET name = $1 WHERE id = $2 RETURNING *';
+    params = [name, id];
+  } else if (genre) {
+    query = 'UPDATE Artists SET genre = $1 WHERE id = $2 RETURNING *';
+    params = [ genre, id];
+  }
+
+  try {
+    const { rows: [ artist ] } = await db.query(query, params);
+
+    if(!artist) {
+      return res.status(404).json({ message: `artist ${id} does not exist` });
+    }
+
+    res.status(200).json(artist);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+}
+
+module.exports = { createArtist, getAllArtists, getArtistById, updateArtist }

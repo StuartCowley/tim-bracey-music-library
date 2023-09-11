@@ -51,7 +51,7 @@ describe('Read Artists', () => {
       const { status, body } = await request(app).get('/artists/999999999').send();
 
       expect(status).to.equal(404);
-      console.log(`BODY MESSAGE: ${body.message}`);
+      // console.log(`BODY MESSAGE: ${body.message}`);
       expect(body.message).to.equal('artist 999999999 does not exist');
     });
   });
