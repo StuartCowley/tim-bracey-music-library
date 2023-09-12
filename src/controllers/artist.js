@@ -90,7 +90,7 @@ const updateArtist = async (req, res) => {
 
   try {
     const { rows: [ artist ] } = await db.query(query, params);
-    console.log(artist);
+    // console.log(artist);
 
     if(!artist) {
       return res.status(404).json({ message: `artist ${id} does not exist` });
@@ -114,4 +114,22 @@ const deleteArtist = async (req, res) => {
   res.status(200).json(artist);
 }
 
-module.exports = { createArtist, getAllArtists, getArtistById, updateArtist, deleteArtist }
+const createAlbum = async (req, res) => {
+  const { id: artist_id } = req.params;
+  const { name, year, } = req.body;
+
+  // console.log(name);
+  // console.log(year);
+  // console.log(artist_id)
+
+  try {
+    const { rows: [ album ] } = await db.query('INSERT INTO Albums (name, year, artist_id) VALUES ($1, $2, $3) RETURNING *', [
+      name, year, artist_id
+    ]);
+    res.status(201).json(album);
+  } catch (err) {
+    res.status(500).json(err.message);
+  }
+}
+
+module.exports = { createArtist, getAllArtists, getArtistById, updateArtist, deleteArtist, createAlbum }

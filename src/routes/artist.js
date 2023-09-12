@@ -1,5 +1,5 @@
 const express = require('express');
-const { createArtist, getAllArtists, getArtistById, updateArtist, deleteArtist } = require('../controllers/artist');
+const { createArtist, getAllArtists, getArtistById, updateArtist, deleteArtist, createAlbum } = require('../controllers/artist');
 
 const artistRouter = express.Router();
 
@@ -14,5 +14,7 @@ artistRouter.get('/:id', getArtistById);
 artistRouter.patch('/:id', updateArtist);
 
 artistRouter.delete('/:id', deleteArtist);
+
+artistRouter.post('/:id/albums', createAlbum);
 
 module.exports = artistRouter;
