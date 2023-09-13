@@ -1,9 +1,11 @@
 const express = require('express');
-const { getAllAlbums } = require('../controllers/album');
+const { getAllAlbums, getAlbumById } = require('../controllers/album');
 
 
 const albumRouter = express.Router();
 
 albumRouter.get('/', getAllAlbums);
+
+albumRouter.get('/:id', getAlbumById);
 
 module.exports = albumRouter;
