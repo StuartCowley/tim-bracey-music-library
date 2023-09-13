@@ -71,6 +71,7 @@ const getArtistById = async (req, res) => {
 
 
 // Clean way
+
 const updateArtist = async (req, res) => {
   const { id } = req.params;
   const { name, genre } = req.body;

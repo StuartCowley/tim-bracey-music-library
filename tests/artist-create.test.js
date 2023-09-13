@@ -5,7 +5,7 @@ const app = require('../src/app');
 const { createArtist } = require('../src/controllers/artist');
 const sinon = require('sinon');
 
-describe('create artist', () => {
+describe('Create artist', () => {
   describe('/artists', () => {
     describe('POST', () => {
       it('expects a 201 status code', async () => {
